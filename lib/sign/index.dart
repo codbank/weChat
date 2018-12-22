@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../route/application.dart';
-
 class LoginHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      resizeToAvoidBottomPadding: false,
         body: new Container(
       decoration: BoxDecoration(
         image: DecorationImage(

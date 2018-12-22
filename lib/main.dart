@@ -1,10 +1,16 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wechat/route/route_handle.dart';
 import 'package:wechat/sign/index.dart';
 import './route/application.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  SystemUiOverlayStyle systemUiOverlayStyle =
+      SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+  SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
