@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-
+import 'package:wechat/database/model/user.model.dart';
 abstract class LoginEvent {}
 
 class LoginButtonPressed extends LoginEvent {
-  final String account;
-  final String password;
+  final UserPerson userPerson;
 
-  LoginButtonPressed({@required this.account, @required this.password});
+  LoginButtonPressed({@required this.userPerson});
 }
 
 class LoginIn extends LoginEvent {}
-
+class HasTestLoginIn extends LoginEvent {}
 class LoginButtonCanUse extends LoginEvent {
-  final String account;
-  final String password;
+ final UserPerson userPerson;
 
-  LoginButtonCanUse({@required this.account, @required this.password});
+  LoginButtonCanUse({@required this.userPerson});
 }

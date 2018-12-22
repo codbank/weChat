@@ -25,6 +25,8 @@ dependencies:
   flutter_bloc: ^0.4.9
   flutter_spinkit: ^3.0.0
   fluttertoast: ^2.2.1
+  sqflite: ^0.13.0+1
+  path_provider: ^0.4.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,31 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:wechat/database/model/user.model.dart';
-import 'package:wechat/sign/login_bloc.dart';
-import 'package:wechat/sign/login_state.dart';
+import 'package:wechat/register/register_bloc.dart';
+import 'package:wechat/register/register_state.dart';
 
-class LoginWithAccount extends StatefulWidget {
-  LoginWithAccount({
-    Key key,
-    @required this.account,
-    @required this.password,
-    @required this.loginBloc,
-    @required this.loginstate,
-  }) : super(key: key);
-
+class RegisterTextFiled extends StatefulWidget {
   final TextEditingController account;
   final TextEditingController password;
-  final LoginBloc loginBloc;
-  final LoginState loginstate;
+  final RegisterState registerState;
+  final RegisterBloc registerBloc;
+  const RegisterTextFiled({
+    Key key,
+    this.account,
+    this.password,
+    this.registerState,
+    this.registerBloc,
+  }) : super(key: key);
 
-  @override
-  LoginWithAccountState createState() {
-    return new LoginWithAccountState();
-  }
+  _RegisterTextFiledState createState() => _RegisterTextFiledState();
 }
 
-class LoginWithAccountState extends State<LoginWithAccount> {
+class _RegisterTextFiledState extends State<RegisterTextFiled> {
   bool accountFlag = true;
   bool passwordFlag = true;
+
+  getRegisterState() {
+    final UserPerson user = new UserPerson(
+        account: widget.account.text, password: widget.password.text);
+    widget.registerBloc.onAccOrPassChange(user: user);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -76,12 +79,7 @@ class LoginWithAccountState extends State<LoginWithAccount> {
                                       accountFlag = true;
                                     });
                                   }
-                                  final user = new UserPerson(
-                                    account: widget.account.text,
-                                    password: widget.password.text,
-                                  );
-                                  widget.loginBloc
-                                      .onAccOrPassChange(user: user);
+                                  getRegisterState();
                                 },
                               ),
                             ),
@@ -98,12 +96,7 @@ class LoginWithAccountState extends State<LoginWithAccount> {
                                       widget.account.text = '';
                                       accountFlag = true;
                                     });
-                                    final user = new UserPerson(
-                                      account: widget.account.text,
-                                      password: widget.password.text,
-                                    );
-                                    widget.loginBloc
-                                        .onAccOrPassChange(user: user);
+                                    getRegisterState();
                                   },
                                 )
                         ],
@@ -154,11 +147,7 @@ class LoginWithAccountState extends State<LoginWithAccount> {
                             passwordFlag = true;
                           });
                         }
-                        final user = new UserPerson(
-                          account: widget.account.text,
-                          password: widget.password.text,
-                        );
-                        widget.loginBloc.onAccOrPassChange(user: user);
+                        getRegisterState();
                       },
                     ),
                   ),
@@ -175,11 +164,7 @@ class LoginWithAccountState extends State<LoginWithAccount> {
                             widget.password.text = '';
                             passwordFlag = true;
                           });
-                          final user = new UserPerson(
-                            account: widget.account.text,
-                            password: widget.password.text,
-                          );
-                          widget.loginBloc.onAccOrPassChange(user: user);
+                          getRegisterState();
                         },
                       )
               ],

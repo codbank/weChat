@@ -7,7 +7,7 @@ import 'package:wechat/sign/login_with_phone.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:wechat/database/model/user.model.dart';
 class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
@@ -47,10 +47,7 @@ class _LoginPageState extends State<LoginPage> {
       ) {
         if (_loginFailed(loginstate)) {
           showColoredToast(loginstate.failed);
-          _loginBloc.onAccOrPassChange(
-            account: _account.text,
-            password: _password.text,
-          );
+          _loginBloc.hasTestLoginIn();
         }
         if (_loginSuccessed(loginstate)) {
           showColoredToast(loginstate.success);
@@ -140,10 +137,11 @@ class _LoginPageState extends State<LoginPage> {
                                   // 是手机号登陆
                                 } else {
                                   // 微信号/QQ号/邮箱登录
-                                  _loginBloc.onLoginButtonPressed(
+                                  final user = new UserPerson(
                                     account: _account.text,
                                     password: _password.text,
                                   );
+                                  _loginBloc.onLoginButtonPressed(user: user);
                                 }
                               }
                             : null,
@@ -210,47 +208,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
-              loginstate.isLoading
-                  ? Positioned(
-                      child: Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        color: Colors.black12.withOpacity(0.5),
-                        child: new Center(
-                          child: new Container(
-                            width: MediaQuery.of(context).size.width - 150,
-                            height: MediaQuery.of(context).size.width / 5,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.0),
-                                color: Colors.black.withOpacity(0.65)),
-                            child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(
-                                  width: 30,
-                                ),
-                                SpinKitRing(
-                                  color: Colors.white,
-                                  lineWidth: 3,
-                                  size: 30,
-                                ),
-                                SizedBox(
-                                  width: 30,
-                                ),
-                                Text(
-                                  '加载中...',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w100),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  : Container()
+              loginstate.isLoading ? new LoginLoading() : Container()
             ],
           ),
         );
@@ -260,4 +218,53 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _loginFailed(LoginState state) => state.failed.isNotEmpty;
   bool _loginSuccessed(LoginState state) => state.success.isNotEmpty;
+}
+
+class LoginLoading extends StatelessWidget {
+  const LoginLoading({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      child: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.black12.withOpacity(0.5),
+        child: new Center(
+          child: new Container(
+            width: MediaQuery.of(context).size.width - 150,
+            height: MediaQuery.of(context).size.width / 5,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                color: Colors.black.withOpacity(0.65)),
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  width: 30,
+                ),
+                SpinKitRing(
+                  color: Colors.white,
+                  lineWidth: 3,
+                  size: 30,
+                ),
+                SizedBox(
+                  width: 30,
+                ),
+                Text(
+                  '加载中...',
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w100),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
