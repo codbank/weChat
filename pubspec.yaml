@@ -27,6 +27,7 @@ dependencies:
   fluttertoast: ^2.2.1
   sqflite: ^0.13.0+1
   path_provider: ^0.4.1
+  jpush_flutter: 0.0.8
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -59,10 +60,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: iconfont
+      fonts:
+        - asset: assets/iconfont.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
