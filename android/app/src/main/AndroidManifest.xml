@@ -34,7 +34,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="wechat"
-        android:icon="@mipmap/weixin2">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
