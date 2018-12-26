@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:wechat/database/database.dart';
+// import 'package:wechat/database/database.dart';
 import 'package:wechat/database/model/user.model.dart';
 import 'package:wechat/register/register_event.dart';
 import 'package:wechat/register/register_state.dart';
 import 'package:wechat/sign/login_event.dart';
-
+import '../firebase_auth/auth.dart';
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
+  final _auth = new WxChatAuth();
   @override
   //设置登陆的初始状态
   RegisterState get initialState => RegisterState.initial();
@@ -60,16 +61,19 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   //删除所有的比较简单，在这里我们去修改他
   Future _getResult(UserPerson user) async {
     // 查询
-    var data = await DataBaseLoginProvider.db.queryUser();
-    if (data.length == 0) {
-      DataBaseLoginProvider.db.insetDB(user);
-    } else {
-      var addNewUser = new UserPerson(
-        id: data[0].id,
-        account: user.account,
-        password: user.password
-      );
-      await DataBaseLoginProvider.db.updataUser(addNewUser);
-    }
+    // var data = await DataBaseLoginProvider.db.queryUser();
+    //    if (data.length == 0) {
+    //   DataBaseLoginProvider.db.insetDB(user);
+    // } else {
+    //   var addNewUser = new UserPerson(
+    //     id: data[0].id,
+    //     account: user.account,
+    //     password: user.password
+    //   );
+    //   await DataBaseLoginProvider.db.updataUser(addNewUser);
+    // }
+     final userId = await _auth.createUser(user.account, user.password);
+     print(userId);
+
   }
 }

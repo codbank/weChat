@@ -125,41 +125,41 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: new RaisedButton(
-                        disabledColor: Color(0xcf09BB07).withOpacity(0.4),
-                        color: Color(0xff09BB07),
-                        shape: new RoundedRectangleBorder(),
-                        onPressed: loginstate.isLoginButtonEnable
-                            ? () {
-                                FocusScope.of(context).requestFocus(
-                                  new FocusNode(),
+                      disabledColor: Color(0xcf09BB07).withOpacity(0.4),
+                      color: Color(0xff09BB07),
+                      shape: new RoundedRectangleBorder(),
+                      onPressed: loginstate.isLoginButtonEnable
+                          ? () {
+                              FocusScope.of(context).requestFocus(
+                                new FocusNode(),
+                              );
+                              if (loginType) {
+                                // 是手机号登陆
+                              } else {
+                                // 微信号/QQ号/邮箱登录
+                                final user = new UserPerson(
+                                  account: _account.text,
+                                  password: _password.text,
                                 );
-                                if (loginType) {
-                                  // 是手机号登陆
-                                } else {
-                                  // 微信号/QQ号/邮箱登录
-                                  final user = new UserPerson(
-                                    account: _account.text,
-                                    password: _password.text,
-                                  );
-                                  _loginBloc.onLoginButtonPressed(user: user);
-                                }
+                                _loginBloc.onLoginButtonPressed(user: user);
                               }
-                            : null,
-                        child: new Container(
-                          padding: EdgeInsets.all(14),
-                          child: new Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              new Text(
-                                loginType ? '下一步' : '登陆',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16),
-                              ),
-                            ],
-                          ),
-                        )),
+                            }
+                          : null,
+                      child: new Container(
+                        padding: EdgeInsets.all(14),
+                        child: new Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            new Text(
+                              loginType ? '下一步' : '登陆',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-
                   Spacer(),
                   Padding(
                     padding: EdgeInsets.only(bottom: 10),

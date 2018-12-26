@@ -1,13 +1,15 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:wechat/database/database.dart';
-import 'package:wechat/database/databaseLogin.dart';
+import 'package:wechat/database/model/auth.model.dart';
+import '../database/database_auth.dart';
 import 'package:wechat/sign/login_event.dart';
 import 'package:wechat/sign/login_state.dart';
 import 'package:wechat/database/model/user.model.dart';
+import '../firebase_auth/auth.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
+  final _auth = new WxChatAuth();
   @override
   //设置登陆的初始状态
   LoginState get initialState => LoginState.initial();
@@ -35,36 +37,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (event is LoginButtonPressed) {
       yield LoginState.loading();
       try {
-        // 验证用户存在
-        var _testUserisVaild = await _testisVaild(user: event.userPerson);
-        if (_testUserisVaild) {
-           // 验证用户账户
-          var accountTest = await _testAccount(user: event.userPerson);
-          if (accountTest) {
-            // 验证用户密码
-            final passwordTest = await _testPassword(user: event.userPerson);
-            if (passwordTest) {
-              // 密码账户都正确 将数据存入sign表中
-              var user = new UserPerson(
-                account: event.userPerson.account,
-                password: event.userPerson.password
-              );
-              DataBaseSigninProvider.db.insetDB(user);
-              yield LoginState.successLogin();
-            } else {
-              final failed = "密码错误";
-              yield LoginState.failedLogin(failed);
-            }
-          } else {
-            final failed = "帐号错误";
-            yield LoginState.failedLogin(failed);
-          }
+        final result = await _testLogin(user: event.userPerson);
+        print(result);
+        if (result) {
+          yield LoginState.successLogin();
         } else {
-          final failed = "请先注册";
-          yield LoginState.failedLogin(failed);
+          final err = '登陆失败';
+          yield LoginState.failedLogin(err);
         }
       } catch (err) {
-        yield LoginState.failure(err);
+        yield LoginState.failure(err.toString());
       }
     }
     if (event is LoginButtonCanUse) {
@@ -84,27 +66,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   // 验证账户
-  Future<bool> _testAccount({UserPerson user}) async {
-    var alreadyRegisteruser = await DataBaseLoginProvider.db.queryUser();
-    if (alreadyRegisteruser[0].account == user.account) {
-      return true;
-    }
-    return false;
-  }
-
-  // 验证密码
-  Future<bool> _testPassword({UserPerson user}) async {
-    var alreadyRegisteruser = await DataBaseLoginProvider.db.queryUser();
-    if (alreadyRegisteruser[0].password == user.password) {
-      return true;
-    }
-    return false;
-  }
-
-  // 验证是否存在
-  Future<bool> _testisVaild({UserPerson user}) async {
-    var alreadyRegisteruser = await DataBaseLoginProvider.db.queryUser();
-    if (alreadyRegisteruser.length > 0) {
+  Future<bool> _testLogin({UserPerson user}) async {
+    await DataBaseAuthProvider.db.deleteClients();
+    final result = await _auth.signIn(user.account, user.password);
+    print(result);
+    var auth = new AuthModel(uuid: result);
+    var alreadyRegisteruser = await DataBaseAuthProvider.db.insetDB(auth);
+    if(alreadyRegisteruser == 1){
       return true;
     }
     return false;

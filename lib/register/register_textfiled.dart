@@ -22,7 +22,7 @@ class RegisterTextFiled extends StatefulWidget {
 class _RegisterTextFiledState extends State<RegisterTextFiled> {
   bool accountFlag = true;
   bool passwordFlag = true;
-
+  // bool _validation = false;
   getRegisterState() {
     final UserPerson user = new UserPerson(
         account: widget.account.text, password: widget.password.text);
@@ -42,7 +42,6 @@ class _RegisterTextFiledState extends State<RegisterTextFiled> {
                   child: new InkWell(
                     onTap: () {},
                     child: Container(
-                      // padding: EdgeInsets.only(bottom: 10),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: new BorderSide(
@@ -57,31 +56,36 @@ class _RegisterTextFiledState extends State<RegisterTextFiled> {
                           new Container(
                             padding: EdgeInsets.only(left: 8),
                             width: MediaQuery.of(context).size.width * 0.25,
-                            child: new Text('帐号'),
+                            child: new Text('邮箱'),
                           ),
                           new Expanded(
-                            child: new Container(
-                              child: TextField(
-                                textAlign: TextAlign.left,
-                                controller: widget.account,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: '请输入帐号',
-                                  hintStyle: TextStyle(color: Colors.black12),
-                                ),
-                                onChanged: (val) {
-                                  if (widget.account.text.length > 0) {
-                                    setState(() {
-                                      accountFlag = false;
-                                    });
-                                  } else {
-                                    setState(() {
-                                      accountFlag = true;
-                                    });
-                                  }
-                                  getRegisterState();
-                                },
+                            child: TextField(
+                              textAlign: TextAlign.left,
+                              controller: widget.account,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: '请输入邮箱',
+                                hintStyle: TextStyle(color: Colors.black12),
+
                               ),
+                              onChanged: (val) {
+                                if (widget.account.text.length > 0) {
+                                  // print(valEmail(widget.account.text));
+                                  setState(() {
+                                    accountFlag = false;
+                                    // if (!valEmail(widget.account.text)) {
+                                    //   _validation = true;
+                                    // } else {
+                                    //   _validation = false;
+                                    // }
+                                  });
+                                } else {
+                                  setState(() {
+                                    accountFlag = true;
+                                  });
+                                }
+                                getRegisterState();
+                              },
                             ),
                           ),
                           accountFlag
@@ -114,7 +118,7 @@ class _RegisterTextFiledState extends State<RegisterTextFiled> {
               border: Border(
                 bottom: new BorderSide(
                   width: 1,
-                  color: Color(0xafcccccc),
+                  color: Color(0xff09BB07),
                 ),
               ),
             ),
